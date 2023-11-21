@@ -17,13 +17,12 @@ public class Sorter : MonoBehaviour
     {
         SelectionSort,
         BubbleSort,
-        InsertSort,
+        InsertionSort,
         QuickSort,
         MergeSort,
-        HeapSort,
     }
 
-    public Algorithm algorithm;
+    public Algorithm algorithm = Algorithm.SelectionSort;
 
     private delegate void SortDelegate(float[] arr);
 
@@ -32,7 +31,6 @@ public class Sorter : MonoBehaviour
     void Start()
     {
         _displaySorting = DisplaySorting.instance;
-        algorithm = Algorithm.SelectionSort;
     }
 
     // Update is called once per frame
@@ -48,6 +46,14 @@ public class Sorter : MonoBehaviour
             case Algorithm.SelectionSort:
                 if (!displayMode) _sort = SelectionSort;
                 else _sort = SelectionSortDisplay;
+                break;
+            case Algorithm.BubbleSort:
+                if (!displayMode) _sort = BubbleSort;
+                else _sort = BubbleSortDisPlay;
+                break;
+            case Algorithm.InsertionSort:
+                if (!displayMode) _sort = InsertionSort;
+                else _sort = InertionSortDisplay;
                 break;
             case Algorithm.MergeSort:
                 if (!displayMode) _sort = MergeSort;
@@ -76,11 +82,9 @@ public class Sorter : MonoBehaviour
     void SelectionSort(float[] array)
     {
         int len = array.Length;
-        int minIndex;
-        float temp;
         for (int i = 0; i < len - 1; i++)
         {
-            minIndex = i;
+            int minIndex = i;
             for (int j = i + 1; j < len; j++)
             {
                 if (array[j] < array[minIndex]) minIndex = j;
@@ -110,6 +114,90 @@ public class Sorter : MonoBehaviour
 
             (array[i], array[minIndex]) = (array[minIndex], array[i]);
             // yield return new WaitForEndOfFrame();
+        }
+    }
+
+    #endregion
+
+    #region BubbleSort
+
+    void BubbleSort(float[] array)
+    {
+        int len = array.Length;
+        if (len < 2) return;
+        for (int i = 0; i < len - 1; i++)
+        {
+            for (int j = 0; j < len - 1 - i; j++)
+            {
+                if (array[j] > array[j + 1]) (array[j], array[j + 1]) = (array[j + 1], array[j]);
+            }
+        }
+    }
+
+    void BubbleSortDisPlay(float[] array)
+    {
+        StartCoroutine(BubbleSortCorutine(array));
+    }
+
+    IEnumerator BubbleSortCorutine(float[] array)
+    {
+        int len = array.Length;
+        if (len < 2) yield break;
+        for (int i = 0; i < len - 1; i++)
+        {
+            for (int j = 0; j < len - 1 - i; j++)
+            {
+                if (array[j] > array[j + 1]) (array[j], array[j + 1]) = (array[j + 1], array[j]);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+    }
+
+    #endregion
+
+    #region InsertionSort
+
+    void InsertionSort(float[] array)
+    {
+        int len = array.Length;
+        int preIndex;
+        float currentValue;
+        for (int i = 1; i < len; i++)
+        {
+            preIndex = i - 1;
+            currentValue = array[i];
+            while (preIndex >= 0 && array[preIndex] > currentValue)
+            {
+                array[preIndex + 1] = array[preIndex];
+                preIndex--;
+            }
+
+            array[preIndex + 1] = currentValue;
+        }
+    }
+
+    void InertionSortDisplay(float[] array)
+    {
+        StartCoroutine(InsertionSortCoroutine(array));
+    }
+
+    IEnumerator InsertionSortCoroutine(float[] array)
+    {
+        int len = array.Length;
+        int preIndex;
+        float currentValue;
+        for (int i = 1; i < len; i++)
+        {
+            preIndex = i - 1;
+            currentValue = array[i];
+            while (preIndex >= 0 && array[preIndex] > currentValue)
+            {
+                array[preIndex + 1] = array[preIndex];
+                preIndex--;
+                yield return new WaitForEndOfFrame();
+            }
+
+            array[preIndex + 1] = currentValue;
         }
     }
 
@@ -280,7 +368,6 @@ public class Sorter : MonoBehaviour
 
     #endregion MergeSort
 
-
     #region QuickSort
 
     void QuickSort(float[] array)
@@ -353,13 +440,13 @@ public class Sorter : MonoBehaviour
             while (i < j && array[j] >= pivot)
             {
                 j--;
-                // yield return usingPauseInterval? new WaitForSeconds(pauseInterval): new WaitForEndOfFrame();
+                yield return usingPauseInterval ? new WaitForSeconds(pauseInterval) : new WaitForEndOfFrame();
             }
 
             while (i < j && array[i] <= pivot)
             {
                 i++;
-                // yield return usingPauseInterval? new WaitForSeconds(pauseInterval): new WaitForEndOfFrame();
+                yield return usingPauseInterval ? new WaitForSeconds(pauseInterval) : new WaitForEndOfFrame();
             }
 
             (array[i], array[j]) = (array[j], array[i]);
@@ -367,7 +454,7 @@ public class Sorter : MonoBehaviour
         }
 
         (array[low], array[i]) = (array[i], array[low]);
-        // yield return usingPauseInterval? new WaitForSeconds(pauseInterval): new WaitForEndOfFrame();
+        yield return usingPauseInterval ? new WaitForSeconds(pauseInterval) : new WaitForEndOfFrame();
         callback(i);
     }
 
