@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -6,6 +7,7 @@ using UnityEngine;
 
 public class Sorter : MonoBehaviour
 {
+    public static Sorter instance;
     // Start is called before the first frame update
     private DisplaySorting _displaySorting;
 
@@ -28,6 +30,18 @@ public class Sorter : MonoBehaviour
 
     private SortDelegate _sort;
 
+    private void Awake()
+    {
+        if (!instance)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
     void Start()
     {
         _displaySorting = DisplaySorting.instance;
@@ -36,7 +50,7 @@ public class Sorter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SelecteSortAlgorithm();
+        //SelecteSortAlgorithm();
     }
 
     void SelecteSortAlgorithm()
@@ -74,6 +88,7 @@ public class Sorter : MonoBehaviour
 
     public void Sort()
     {
+        SelecteSortAlgorithm();
         _sort(_displaySorting.arr);
     }
 
