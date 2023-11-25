@@ -1,20 +1,16 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Sorter : MonoBehaviour
 {
     public static Sorter instance;
+
     // Start is called before the first frame update
     private DisplaySorting _displaySorting;
 
     public bool displayMode = false;
     public bool usingPauseInterval = false;
     public float pauseInterval = 0.01f;
-
     public enum Algorithm
     {
         SelectionSort,
@@ -25,6 +21,9 @@ public class Sorter : MonoBehaviour
     }
 
     public Algorithm algorithm = Algorithm.SelectionSort;
+
+    public TimeRecorder timeRecorder;
+    public Gradient gradientForData;
 
     private delegate void SortDelegate(float[] arr);
 
@@ -50,10 +49,9 @@ public class Sorter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //SelecteSortAlgorithm();
     }
 
-    void SelecteSortAlgorithm()
+    public void SelecteSortAlgorithm()
     {
         switch (algorithm)
         {
@@ -91,6 +89,104 @@ public class Sorter : MonoBehaviour
         SelecteSortAlgorithm();
         _sort(_displaySorting.arr);
     }
+
+    public void SortForRecording()
+    {
+        SelecteSortAlgorithm();
+        Stats statsToWriteIn = timeRecorder.GetStats(algorithm);
+
+        // // warm up the sorting function;
+        // _displaySorting.Randomize();
+        // // _displaySorting.RegenerateArray();
+        // _sort(_displaySorting.arr);
+
+        for (int i = 0; i < 6; i++)
+        {
+            _displaySorting.OnSizeSelected(i);
+
+            for (int j = 0; j < 10; j++)
+            {
+                //prepare the array
+                _displaySorting.Randomize();
+                // _displaySorting.RegenerateArray();
+
+                // sort the array and count time;
+                float startTime = Time.realtimeSinceStartup;
+                _sort(_displaySorting.arr);
+                float endTime = Time.realtimeSinceStartup;
+                float timeInterval = endTime - startTime;
+                float timeIntervalInMicroSecond = timeInterval * 1000000f;
+                statsToWriteIn.timeRecords[i, j] = timeIntervalInMicroSecond;
+            }
+        }
+
+        statsToWriteIn.CalculateStats();
+
+        statsToWriteIn.Print();
+    }
+
+    public void ShowDataOnSortTable()
+    {
+        SortTable sortTable = GetSortTable();
+        Stats statsToRead = timeRecorder.GetStats(algorithm);
+
+        // for 6 types of size: 10, 50,100,500,1000,5000 
+        for (int i = 0; i < 6; i++)
+        {
+            float min = statsToRead.min[i, 0];
+            sortTable.dataLines[i].min.text = min.ToString("F2");
+            sortTable.dataLines[i].min.color = DeriveColorFromData(min);
+            
+            float max = statsToRead.max[i, 0];
+            sortTable.dataLines[i].max.text = max.ToString("F2");
+            sortTable.dataLines[i].max.color = DeriveColorFromData(max);
+            
+            float med = statsToRead.med[i, 0];
+            sortTable.dataLines[i].med.text = med.ToString("F2");
+            sortTable.dataLines[i].med.color = DeriveColorFromData(med);
+            
+            float avg = statsToRead.avg[i, 0];
+            sortTable.dataLines[i].avg.text = avg.ToString("F2");
+            sortTable.dataLines[i].avg.color = DeriveColorFromData(avg);
+        }
+    }
+
+    Color DeriveColorFromData(float data)
+    {
+        float t = Mathf.Log10(data + 1) / 5;
+        Color color = gradientForData.Evaluate(t);
+        return color;
+    }
+
+
+    SortTable GetSortTable()
+    {
+        SortTable sortTable;
+        switch (algorithm)
+        {
+            case Algorithm.InsertionSort:
+                sortTable = UIManager.instance.insertionSortTable;
+                break;
+            case Algorithm.BubbleSort:
+                sortTable = UIManager.instance.bubbleSortTable;
+                break;
+            case Algorithm.SelectionSort:
+                sortTable = UIManager.instance.selectionSortTable;
+                break;
+            case Algorithm.MergeSort:
+                sortTable = UIManager.instance.mergeSortTable;
+                break;
+            case Algorithm.QuickSort:
+                sortTable = UIManager.instance.quickSortTable;
+                break;
+            default:
+                sortTable = UIManager.instance.selectionSortTable;
+                break;
+        }
+
+        return sortTable;
+    }
+
 
     #region SelectionSort
 

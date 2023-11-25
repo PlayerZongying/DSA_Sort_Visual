@@ -1,20 +1,51 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using TMPro;
 using UnityEngine;
 using Unity.UI;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager instance;
+    
     private DisplaySorting _displaySorting;
     private Sorter _sorter;
 
     public TextMeshProUGUI toggleButtonText;
 
+    public GameObject measureModePanel;
+    public GameObject displayModePanel;
+
+    [Space]
+    public TMP_Dropdown sizeDropdownInDisplay;
+    public TMP_Dropdown algorithmDropdownInDisplay;
+    public TMP_Dropdown algorithmDropdownInMeasure;
+
+    [Space] 
+    public SortTable insertionSortTable;
+    public SortTable bubbleSortTable;
+    public SortTable selectionSortTable;
+    public SortTable mergeSortTable;
+    public SortTable quickSortTable;
+
+    private void Awake()
+    {
+        if (!instance)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
     // Start is called before the first frame update
-    void Start()
+        void Start()
     {
         _displaySorting = DisplaySorting.instance;
         _sorter = Sorter.instance;
@@ -37,10 +68,66 @@ public class UIManager : MonoBehaviour
         if (!isDisplay)
         {
             toggleButtonText.text = "Measure Mode";
+            displayModePanel.SetActive(false);
+            measureModePanel.SetActive(true);
+            SetAlgorithmDropDown(algorithmDropdownInMeasure);
         }
         else
         {
             toggleButtonText.text = "Display Mode";
+            measureModePanel.SetActive(false);
+            displayModePanel.SetActive(true);
+            SetSizeDropDown(sizeDropdownInDisplay);
+            SetAlgorithmDropDown(algorithmDropdownInDisplay);
+        }
+    }
+
+    public void SetSizeDropDown(TMP_Dropdown sizeDropDown)
+    {
+        DisplaySorting.ArraySize arraySize = _displaySorting.arraySize;
+        switch (arraySize)
+        {
+            case DisplaySorting.ArraySize.Ten:
+                sizeDropDown.value = 0;
+                break;
+            case DisplaySorting.ArraySize.Fifty:
+                sizeDropDown.value = 1;
+                break;
+            case DisplaySorting.ArraySize.Hundred:
+                sizeDropDown.value = 2;
+                break;
+            case DisplaySorting.ArraySize.FiveHundred:
+                sizeDropDown.value = 3;
+                break;
+            case DisplaySorting.ArraySize.Thousand:
+                sizeDropDown.value = 4;
+                break;
+            case DisplaySorting.ArraySize.FiveThousand:
+                sizeDropDown.value = 5;
+                break;
+        }
+    }
+    
+    public void SetAlgorithmDropDown(TMP_Dropdown algorithmDropDown)
+    {
+        Sorter.Algorithm algorithm = _sorter.algorithm;
+        switch (algorithm)
+        {
+            case Sorter.Algorithm.InsertionSort:
+                algorithmDropDown.value = 0;
+                break;
+            case Sorter.Algorithm.BubbleSort:
+                algorithmDropDown.value = 1;
+                break;
+            case Sorter.Algorithm.SelectionSort:
+                algorithmDropDown.value = 2;
+                break;
+            case Sorter.Algorithm.MergeSort:
+                algorithmDropDown.value = 3;
+                break;
+            case Sorter.Algorithm.QuickSort:
+                algorithmDropDown.value = 4;
+                break;
         }
     }
 
@@ -91,6 +178,6 @@ public class UIManager : MonoBehaviour
                 _sorter.algorithm = Sorter.Algorithm.QuickSort;
                 break;
         }
-        _sorter.Sort();
     }
+    
 }

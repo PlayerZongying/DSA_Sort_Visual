@@ -7,6 +7,7 @@ public class DisplaySorting : MonoBehaviour
 {
 
     public static DisplaySorting instance;
+    public int testTime = 10;
     public enum ArraySize : int
     {
         Ten = 10,
@@ -118,6 +119,33 @@ public class DisplaySorting : MonoBehaviour
         {
             Debug.Log(f);
         }
+    }
+    
+    public void OnSizeSelected(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                arraySize = ArraySize.Ten;
+                break;
+            case 1:
+                arraySize = ArraySize.Fifty;
+                break;
+            case 2:
+                arraySize = ArraySize.Hundred;
+                break;
+            case 3:
+                arraySize = ArraySize.FiveHundred;
+                break;
+            case 4:
+                arraySize = ArraySize.Thousand;
+                break;
+            case 5:
+                arraySize = ArraySize.FiveThousand;
+                break;
+        }
+
+        RegenerateArray();
     }
 
     // void DrawArrayOnGUI(float[] arr)
