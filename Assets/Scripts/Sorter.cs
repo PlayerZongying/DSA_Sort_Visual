@@ -10,7 +10,9 @@ public class Sorter : MonoBehaviour
 
     public bool displayMode = false;
     public bool usingPauseInterval = false;
+    public bool testOnRandomizedArray = true;
     public float pauseInterval = 0.01f;
+
     public enum Algorithm
     {
         SelectionSort,
@@ -107,7 +109,10 @@ public class Sorter : MonoBehaviour
             for (int j = 0; j < 10; j++)
             {
                 //prepare the array
-                _displaySorting.Randomize();
+                if (testOnRandomizedArray)
+                {
+                    _displaySorting.Randomize();
+                }
                 // _displaySorting.RegenerateArray();
 
                 // sort the array and count time;
@@ -136,15 +141,15 @@ public class Sorter : MonoBehaviour
             float min = statsToRead.min[i, 0];
             sortTable.dataLines[i].min.text = min.ToString("F2");
             sortTable.dataLines[i].min.color = DeriveColorFromData(min);
-            
+
             float max = statsToRead.max[i, 0];
             sortTable.dataLines[i].max.text = max.ToString("F2");
             sortTable.dataLines[i].max.color = DeriveColorFromData(max);
-            
+
             float med = statsToRead.med[i, 0];
             sortTable.dataLines[i].med.text = med.ToString("F2");
             sortTable.dataLines[i].med.color = DeriveColorFromData(med);
-            
+
             float avg = statsToRead.avg[i, 0];
             sortTable.dataLines[i].avg.text = avg.ToString("F2");
             sortTable.dataLines[i].avg.color = DeriveColorFromData(avg);

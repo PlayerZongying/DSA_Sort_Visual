@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     public TMP_Dropdown sizeDropdownInDisplay;
     public TMP_Dropdown algorithmDropdownInDisplay;
     public TMP_Dropdown algorithmDropdownInMeasure;
+    public TMP_Dropdown arrayTypeDropdownInMeasure;
 
     [Space] 
     public SortTable insertionSortTable;
@@ -79,7 +80,21 @@ public class UIManager : MonoBehaviour
             displayModePanel.SetActive(true);
             SetSizeDropDown(sizeDropdownInDisplay);
             SetAlgorithmDropDown(algorithmDropdownInDisplay);
+            SetArrayTypeDropDown(arrayTypeDropdownInMeasure);
         }
+    }
+
+    public void SetArrayTypeDropDown(TMP_Dropdown arrayTypeDropDown)
+    {
+        if (_sorter.testOnRandomizedArray)
+        {
+            arrayTypeDropDown.value = 0;
+        }
+        else
+        {
+            arrayTypeDropDown.value = 1;
+        }
+    
     }
 
     public void SetSizeDropDown(TMP_Dropdown sizeDropDown)
@@ -176,6 +191,19 @@ public class UIManager : MonoBehaviour
                 break;
             case 4:
                 _sorter.algorithm = Sorter.Algorithm.QuickSort;
+                break;
+        }
+    }
+
+    public void OnArrayTypeSelected(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                _sorter.testOnRandomizedArray = true;
+                break;
+            case 1:
+                _sorter.testOnRandomizedArray = false;
                 break;
         }
     }
