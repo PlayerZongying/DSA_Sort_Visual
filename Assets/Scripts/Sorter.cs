@@ -167,26 +167,53 @@ public class Sorter : MonoBehaviour
     SortTable GetSortTable()
     {
         SortTable sortTable;
-        switch (algorithm)
+        if (testOnRandomizedArray)
         {
-            case Algorithm.InsertionSort:
-                sortTable = UIManager.instance.insertionSortTable;
-                break;
-            case Algorithm.BubbleSort:
-                sortTable = UIManager.instance.bubbleSortTable;
-                break;
-            case Algorithm.SelectionSort:
-                sortTable = UIManager.instance.selectionSortTable;
-                break;
-            case Algorithm.MergeSort:
-                sortTable = UIManager.instance.mergeSortTable;
-                break;
-            case Algorithm.QuickSort:
-                sortTable = UIManager.instance.quickSortTable;
-                break;
-            default:
-                sortTable = UIManager.instance.selectionSortTable;
-                break;
+            switch (algorithm)
+            {
+                case Algorithm.InsertionSort:
+                    sortTable = UIManager.instance.insertionSortTable;
+                    break;
+                case Algorithm.BubbleSort:
+                    sortTable = UIManager.instance.bubbleSortTable;
+                    break;
+                case Algorithm.SelectionSort:
+                    sortTable = UIManager.instance.selectionSortTable;
+                    break;
+                case Algorithm.MergeSort:
+                    sortTable = UIManager.instance.mergeSortTable;
+                    break;
+                case Algorithm.QuickSort:
+                    sortTable = UIManager.instance.quickSortTable;
+                    break;
+                default:
+                    sortTable = UIManager.instance.selectionSortTable;
+                    break;
+            }
+        }
+        else
+        {
+            switch (algorithm)
+            {
+                case Algorithm.InsertionSort:
+                    sortTable = UIManager.instance.insertionSortTableSorted;
+                    break;
+                case Algorithm.BubbleSort:
+                    sortTable = UIManager.instance.bubbleSortTableSorted;
+                    break;
+                case Algorithm.SelectionSort:
+                    sortTable = UIManager.instance.selectionSortTableSorted;
+                    break;
+                case Algorithm.MergeSort:
+                    sortTable = UIManager.instance.mergeSortTableSorted;
+                    break;
+                case Algorithm.QuickSort:
+                    sortTable = UIManager.instance.quickSortTableSorted;
+                    break;
+                default:
+                    sortTable = UIManager.instance.selectionSortTableSorted;
+                    break;
+            }
         }
 
         return sortTable;

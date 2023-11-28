@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    
+
     private DisplaySorting _displaySorting;
     private Sorter _sorter;
 
@@ -20,18 +20,26 @@ public class UIManager : MonoBehaviour
     public GameObject measureModePanel;
     public GameObject displayModePanel;
 
-    [Space]
-    public TMP_Dropdown sizeDropdownInDisplay;
+    [Space] public TMP_Dropdown sizeDropdownInDisplay;
     public TMP_Dropdown algorithmDropdownInDisplay;
     public TMP_Dropdown algorithmDropdownInMeasure;
     public TMP_Dropdown arrayTypeDropdownInMeasure;
 
-    [Space] 
+    [Space] [Header("Table for sorting randomized array ")]
+    public GameObject panelForRandomizedArray;
     public SortTable insertionSortTable;
     public SortTable bubbleSortTable;
     public SortTable selectionSortTable;
     public SortTable mergeSortTable;
     public SortTable quickSortTable;
+
+    [Space] [Header("Table for sorting sorted array ")]
+    public GameObject panelForSortedArray;
+    public SortTable insertionSortTableSorted;
+    public SortTable bubbleSortTableSorted;
+    public SortTable selectionSortTableSorted;
+    public SortTable mergeSortTableSorted;
+    public SortTable quickSortTableSorted;
 
     private void Awake()
     {
@@ -46,11 +54,12 @@ public class UIManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-        void Start()
+    void Start()
     {
         _displaySorting = DisplaySorting.instance;
         _sorter = Sorter.instance;
         SetToggleMode(_sorter.displayMode);
+        OnArrayTypeSelected(0);
     }
 
     // Update is called once per frame
@@ -94,7 +103,6 @@ public class UIManager : MonoBehaviour
         {
             arrayTypeDropDown.value = 1;
         }
-    
     }
 
     public void SetSizeDropDown(TMP_Dropdown sizeDropDown)
@@ -122,7 +130,7 @@ public class UIManager : MonoBehaviour
                 break;
         }
     }
-    
+
     public void SetAlgorithmDropDown(TMP_Dropdown algorithmDropDown)
     {
         Sorter.Algorithm algorithm = _sorter.algorithm;
@@ -201,11 +209,14 @@ public class UIManager : MonoBehaviour
         {
             case 0:
                 _sorter.testOnRandomizedArray = true;
+                panelForRandomizedArray.SetActive(true);
+                panelForSortedArray.SetActive(false);
                 break;
             case 1:
                 _sorter.testOnRandomizedArray = false;
+                panelForRandomizedArray.SetActive(false);
+                panelForSortedArray.SetActive(true);
                 break;
         }
     }
-    
 }
