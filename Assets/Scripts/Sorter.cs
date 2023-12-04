@@ -127,7 +127,7 @@ public class Sorter : MonoBehaviour
 
         statsToWriteIn.CalculateStats();
 
-        statsToWriteIn.Print();
+        // statsToWriteIn.Print();
     }
 
     public void ShowDataOnSortTable()
@@ -270,10 +270,17 @@ public class Sorter : MonoBehaviour
         if (len < 2) return;
         for (int i = 0; i < len - 1; i++)
         {
+            bool didSwap = false;
             for (int j = 0; j < len - 1 - i; j++)
             {
-                if (array[j] > array[j + 1]) (array[j], array[j + 1]) = (array[j + 1], array[j]);
+                if (array[j] > array[j + 1])
+                {
+                    (array[j], array[j + 1]) = (array[j + 1], array[j]);
+                    didSwap = true;
+                }
             }
+
+            if (!didSwap) return;
         }
     }
 
@@ -288,11 +295,19 @@ public class Sorter : MonoBehaviour
         if (len < 2) yield break;
         for (int i = 0; i < len - 1; i++)
         {
+            bool didSwap = false;
             for (int j = 0; j < len - 1 - i; j++)
             {
-                if (array[j] > array[j + 1]) (array[j], array[j + 1]) = (array[j + 1], array[j]);
+                if (array[j] > array[j + 1])
+                {
+                    (array[j], array[j + 1]) = (array[j + 1], array[j]);
+                    didSwap = true;
+                }
+
                 yield return new WaitForEndOfFrame();
             }
+
+            if (!didSwap) yield break;
         }
     }
 
