@@ -1,12 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using TMPro;
 using UnityEngine;
-using Unity.UI;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -128,6 +121,8 @@ public class UIManager : MonoBehaviour
             case DisplaySorting.ArraySize.FiveThousand:
                 sizeDropDown.value = 5;
                 break;
+            default:sizeDropDown.value = 0;
+                break;
         }
     }
 
@@ -150,6 +145,8 @@ public class UIManager : MonoBehaviour
                 break;
             case Sorter.Algorithm.QuickSort:
                 algorithmDropDown.value = 4;
+                break;
+            default:algorithmDropDown.value = 0;
                 break;
         }
     }

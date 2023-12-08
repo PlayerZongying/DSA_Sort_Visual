@@ -43022,7 +43022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3321ff4de4c69e04bbd7fd92db5ae396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayMode: 0
+  displayMode: 1
   usingPauseInterval: 0
   testOnRandomizedArray: 1
   pauseInterval: 0.001
