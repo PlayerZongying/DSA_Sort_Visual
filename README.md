@@ -1,5 +1,5 @@
 # DSA Sort Visual
-
+[Play at Itch.io](https://playerzongying.itch.io/dsa-sort-visual) 
 I did a small unity project to visualize the sorting process and measure time consuming for different sorting algorithms, including insert sort, bubble sort, selection sort, merge sort, and quick sort.
 
 The unity project has 2 modes: 
